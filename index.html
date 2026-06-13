@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Liza ✈️</title>
+  <meta name="description" content="A little something — pick where we fly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <span class="cloud cloud--1"></span>
+    <span class="cloud cloud--2"></span>
+    <span class="cloud cloud--3"></span>
+    <span class="plane">✈</span>
+  </div>
+
+  <main class="stage">
+    <header class="intro">
+      <p class="intro__eyebrow">Boarding pass · just for you</p>
+      <h1 class="intro__title">Where shall we fly,<br><em>Liza?</em></h1>
+      <p class="intro__lede">Tel&nbsp;Aviv is where we start. You choose the rest — pick a destination and the dates, then press save. Your tickets fly straight to Mark. 💜</p>
+    </header>
+
+    <form id="trip-form" class="tickets" novalidate>
+      <!-- Web3Forms config -->
+      <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY" />
+      <input type="hidden" name="subject" value="✈️ Liza picked our trip!" />
+      <input type="hidden" name="from_name" value="Liza's Boarding Pass" />
+      <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+      <!-- mirrored values for the email -->
+      <input type="hidden" name="Passenger" value="Liza Gindis" />
+      <input type="hidden" name="From" value="Tel Aviv (TLV)" />
+
+      <!-- OUTBOUND -->
+      <article class="ticket">
+        <div class="ticket__stub">
+          <span class="ticket__brand">LIZA&nbsp;AIR</span>
+          <span class="ticket__stub-label">Outbound</span>
+          <div class="ticket__stub-route">
+            <span>TLV</span>
+            <span class="ticket__stub-arrow">→</span>
+            <span class="ticket__stub-dest" data-dest-code>•••</span>
+          </div>
+          <span class="ticket__seat">SEAT 1A</span>
+        </div>
+        <div class="ticket__perf" aria-hidden="true"></div>
+        <div class="ticket__main">
+          <div class="ticket__head">
+            <span class="ticket__brand ticket__brand--main">LIZA&nbsp;AIR</span>
+            <span class="ticket__flight">FLIGHT&nbsp;LZ&nbsp;001</span>
+          </div>
+          <div class="route">
+            <div class="route__point">
+              <span class="route__city">Tel Aviv</span>
+              <span class="route__code">TLV</span>
+            </div>
+            <div class="route__path" aria-hidden="true"><span class="route__plane">✈</span></div>
+            <div class="route__point route__point--right">
+              <span class="route__city" data-dest-city>Anywhere</span>
+              <span class="route__code" data-dest-code>•••</span>
+            </div>
+          </div>
+          <div class="ticket__fields">
+            <label class="field field--wide">
+              <span class="field__label">Destination</span>
+              <input type="text" id="destination" name="Destination" placeholder="e.g. Paris" autocomplete="off" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Departure date</span>
+              <input type="date" id="depart" name="Departure date" required />
+            </label>
+          </div>
+          <div class="ticket__foot">
+            <span class="ticket__passenger">PASSENGER · LIZA&nbsp;GINDIS</span>
+            <span class="barcode" aria-hidden="true"></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- RETURN -->
+      <article class="ticket ticket--return">
+        <div class="ticket__stub">
+          <span class="ticket__brand">LIZA&nbsp;AIR</span>
+          <span class="ticket__stub-label">Return</span>
+          <div class="ticket__stub-route">
+            <span class="ticket__stub-dest" data-dest-code>•••</span>
+            <span class="ticket__stub-arrow">→</span>
+            <span>TLV</span>
+          </div>
+          <span class="ticket__seat">SEAT 1A</span>
+        </div>
+        <div class="ticket__perf" aria-hidden="true"></div>
+        <div class="ticket__main">
+          <div class="ticket__head">
+            <span class="ticket__brand ticket__brand--main">LIZA&nbsp;AIR</span>
+            <span class="ticket__flight">FLIGHT&nbsp;LZ&nbsp;002</span>
+          </div>
+          <div class="route">
+            <div class="route__point">
+              <span class="route__city" data-dest-city>Anywhere</span>
+              <span class="route__code" data-dest-code>•••</span>
+            </div>
+            <div class="route__path" aria-hidden="true"><span class="route__plane">✈</span></div>
+            <div class="route__point route__point--right">
+              <span class="route__city">Tel Aviv</span>
+              <span class="route__code">TLV</span>
+            </div>
+          </div>
+          <div class="ticket__fields">
+            <label class="field">
+              <span class="field__label">Return date</span>
+              <input type="date" id="return" name="Return date" required />
+            </label>
+          </div>
+          <div class="ticket__foot">
+            <span class="ticket__passenger">PASSENGER · LIZA&nbsp;GINDIS</span>
+            <span class="barcode" aria-hidden="true"></span>
+          </div>
+        </div>
+      </article>
+
+      <div class="actions">
+        <p class="form-error" id="form-error" role="alert"></p>
+        <button type="submit" class="save-btn">
+          <span class="save-btn__label">Save &amp; send</span>
+          <span class="save-btn__plane">✈</span>
+        </button>
+      </div>
+    </form>
+
+    <section class="confirmation" id="confirmation" hidden>
+      <div class="confirmation__stamp">✓</div>
+      <h2 class="confirmation__title">Tickets saved!</h2>
+      <p class="confirmation__text" id="confirmation-text">Mark will get your boarding passes any moment now. 💜</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
