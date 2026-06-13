@@ -1,21 +1,59 @@
 (function () {
   "use strict";
 
+  var STORAGE_KEY = "liza-trip-v1";
+
   var form = document.getElementById("trip-form");
   var destInput = document.getElementById("destination");
   var departInput = document.getElementById("depart");
   var returnInput = document.getElementById("return");
   var errorBox = document.getElementById("form-error");
   var button = form.querySelector(".save-btn");
-  var confirmation = document.getElementById("confirmation");
-  var confirmationText = document.getElementById("confirmation-text");
+  var lockNote = document.getElementById("lock-note");
+  var lockSummary = document.getElementById("lock-summary");
+  var editBtn = document.getElementById("edit-btn");
+  var inputs = [destInput, departInput, returnInput];
 
   // Don't let her pick a date in the past.
   var today = new Date().toISOString().split("T")[0];
   departInput.min = today;
   returnInput.min = today;
 
-  // Live-mirror the destination into both tickets.
+  // ---- persistence ----
+  function saveState() {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          destination: destInput.value.trim(),
+          depart: departInput.value,
+          return: returnInput.value,
+          locked: true,
+        })
+      );
+    } catch (e) {
+      /* storage unavailable (private mode) — locking just won't persist */
+    }
+  }
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function clearLock() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  // ---- live destination mirroring ----
   function mirrorDestination() {
     var value = destInput.value.trim();
     var city = value || "Anywhere";
@@ -37,6 +75,43 @@
     }
   });
 
+  // ---- lock / unlock UI ----
+  function prettyDate(iso) {
+    if (!iso) return "";
+    var parts = iso.split("-"); // YYYY-MM-DD
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return parseInt(parts[2], 10) + " " + months[parseInt(parts[1], 10) - 1] + " " + parts[0];
+  }
+
+  function applyLock() {
+    form.classList.add("is-locked");
+    inputs.forEach(function (el) {
+      el.disabled = true;
+    });
+    button.hidden = true;
+    errorBox.textContent = "";
+    lockSummary.textContent =
+      "Tel Aviv → " + (destInput.value.trim() || "—") +
+      " · " + prettyDate(departInput.value) + " – " + prettyDate(returnInput.value);
+    lockNote.hidden = false;
+  }
+
+  function unlock() {
+    form.classList.remove("is-locked");
+    inputs.forEach(function (el) {
+      el.disabled = false;
+    });
+    button.hidden = false;
+    lockNote.hidden = true;
+    destInput.focus();
+  }
+
+  editBtn.addEventListener("click", function () {
+    clearLock();
+    unlock();
+  });
+
+  // ---- validation + submit ----
   function showError(message) {
     errorBox.textContent = message;
   }
@@ -73,20 +148,28 @@
       var result = await response.json();
 
       if (result.success) {
-        confirmationText.textContent =
-          "Mark will get your tickets to " + destInput.value.trim() + " any moment now. 💜";
-        form.hidden = true;
-        confirmation.hidden = false;
-        confirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+        saveState();
+        applyLock();
+        lockNote.scrollIntoView({ behavior: "smooth", block: "center" });
       } else {
         throw new Error(result.message || "Submission failed");
       }
     } catch (err) {
       showError("Something went wrong sending the tickets. Please try again. (" + err.message + ")");
+    } finally {
       button.disabled = false;
       button.classList.remove("is-sending");
     }
   });
+
+  // ---- init: restore a previously saved + locked trip ----
+  var saved = loadState();
+  if (saved && saved.locked) {
+    destInput.value = saved.destination || "";
+    departInput.value = saved.depart || "";
+    returnInput.value = saved.return || "";
+    applyLock();
+  }
 
   mirrorDestination();
 })();

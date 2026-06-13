@@ -25,6 +25,15 @@
       <p class="intro__lede">Tel&nbsp;Aviv is where we start. You choose the rest — pick a destination and the dates, then press save. Your tickets fly straight to Mark. 💜</p>
     </header>
 
+    <div class="lock-note" id="lock-note" hidden>
+      <span class="lock-note__stamp">✓</span>
+      <div class="lock-note__body">
+        <strong class="lock-note__title">Tickets saved &amp; sent to Mark 💜</strong>
+        <span class="lock-note__summary" id="lock-summary"></span>
+      </div>
+      <button type="button" class="lock-note__edit" id="edit-btn">Edit</button>
+    </div>
+
     <form id="trip-form" class="tickets" novalidate>
       <!-- Web3Forms config -->
       <input type="hidden" name="access_key" value="23d09b4b-33c1-4dcd-a7e4-763e410a4a45" />
@@ -131,12 +140,6 @@
         </button>
       </div>
     </form>
-
-    <section class="confirmation" id="confirmation" hidden>
-      <div class="confirmation__stamp">✓</div>
-      <h2 class="confirmation__title">Tickets saved!</h2>
-      <p class="confirmation__text" id="confirmation-text">Mark will get your boarding passes any moment now. 💜</p>
-    </section>
   </main>
 
   <script src="script.js"></script>

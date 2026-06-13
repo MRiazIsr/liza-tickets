@@ -338,40 +338,69 @@ body::after {
   100% { transform: translate(0,0); opacity: 1; }
 }
 
-/* confirmation */
-.confirmation {
-  text-align: center;
+/* lock note (shown after submit / on return visit) */
+.lock-note {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   background: var(--paper);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: clamp(2.5rem, 6vw, 4rem) 2rem;
-  animation: ticket-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px -20px rgba(64, 32, 128, 0.5);
+  padding: 1rem 1.25rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.2rem);
+  border: 1.5px solid var(--paper-edge);
+  animation: ticket-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
-.confirmation__stamp {
-  width: 84px; height: 84px;
-  margin: 0 auto 1.4rem;
+.lock-note__stamp {
+  flex: none;
+  width: 44px; height: 44px;
   display: grid; place-items: center;
-  font-size: 2.4rem;
+  font-size: 1.3rem;
   color: #fff;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-  box-shadow: 0 16px 34px -10px rgba(91, 43, 214, 0.6);
-  animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) 0.1s both;
+  box-shadow: 0 10px 22px -8px rgba(91, 43, 214, 0.6);
+  animation: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) 0.05s both;
 }
-@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
-.confirmation__title {
-  font-family: "Fraunces", serif;
-  font-weight: 600;
-  font-size: clamp(2rem, 5vw, 2.8rem);
-  margin: 0 0 0.6rem;
-}
-.confirmation__text {
+.lock-note__body { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.lock-note__title { font-size: 1rem; }
+.lock-note__summary {
+  font-family: "Space Mono", monospace;
+  font-size: 0.78rem;
   color: var(--ink-soft);
-  font-size: 1.1rem;
-  line-height: 1.6;
-  max-width: 26rem;
-  margin: 0 auto;
 }
+.lock-note__edit {
+  margin-left: auto;
+  flex: none;
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--accent-deep);
+  background: #f3ebff;
+  border: 1.5px solid var(--paper-edge);
+  padding: 0.55rem 1.1rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+.lock-note__edit:hover { background: #e9deff; transform: translateY(-1px); }
+
+/* locked (read-only) tickets */
+.tickets.is-locked .field__label { opacity: 0.7; }
+.tickets.is-locked .field input {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  padding-left: 0;
+  color: var(--ink);
+  -webkit-text-fill-color: var(--ink); /* keep disabled date text dark on iOS */
+  opacity: 1;
+  cursor: default;
+  font-family: "Fraunces", serif;
+  font-size: 1.25rem;
+}
+
+@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
 
 /* ---- responsive ---- */
 @media (max-width: 600px) {
